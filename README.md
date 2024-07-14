@@ -65,8 +65,12 @@
    >
    > - `git add -A`适用于整个工作目录，`git add .`始终适用于当前目录
    >
+   > - `git config --global user.name "用户名" `
+   >
+   > - `git config --global user.email "邮箱"`
+   >
    > 具体命令的解释，参见[这里](https://blog.csdn.net/wq6ylg08/article/details/89028412)
-
+   
    ```bash
    # 第一次
    # 在笔记文件夹目录下 打开git bash输入下列命令初始化本地仓库
@@ -87,14 +91,14 @@
    # 将本地仓库的本地分支推送到远程仓库的远程分支中
    git push -u origin main
    ```
-
+   
    ```bash
    # 第二次...
    git add .
    git commit -m "version 版本号依次往上加"
    git push
    ```
-
+   
    
 
 # 学习经验：
