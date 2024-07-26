@@ -86,7 +86,7 @@
    git branch -m main
    
    # 对远程仓库url设置别名为origin
-   git remote add origin git@github.com:niupengjie/notebook.git
+   git remote add origin git@github.com:qisande/notebook.git
    
    # 将本地仓库的本地分支推送到远程仓库的远程分支中
    git push -u origin main
