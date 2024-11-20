@@ -8,8 +8,7 @@
 
 2. **目录结构示例**
 
-   ```
-   bash复制代码.
+   ```bash
    ├── docker-compose.yml
    ├── docker-compose.prod.yml
    ├── env/
@@ -20,11 +19,11 @@
    │   ├── cache.dev.env
    │   └── cache.prod.env
    ```
-
+   
 3. **`docker-compose.yml` 文件 (基础配置)**
 
-   ```
-   yaml复制代码version: '3.8'
+   ```yaml
+   version: '3.8'
    
    services:
      app:
@@ -47,8 +46,8 @@
 
    这是用于开发环境的文件，默认会被加载。如果需要显式地指定 `docker-compose.override.yml`，可以通过命令行来控制。
 
-   ```
-   yaml复制代码version: '3.8'
+   ```yaml
+   version: '3.8'
    
    services:
      app:
@@ -68,8 +67,8 @@
 
    这是用于生产环境的文件，需要在部署时显式指定。
 
-   ```
-   yaml复制代码version: '3.8'
+   ```yaml
+   version: '3.8'
    
    services:
      app:
@@ -92,10 +91,6 @@
 可以直接使用 `docker-compose up`，因为 `docker-compose.override.yml` 会被自动加载：
 
 ```
-bash
-
-
-复制代码
 docker-compose up
 ```
 
@@ -105,11 +100,7 @@ docker-compose up
 
 需要部署生产环境时，使用 `-f` 参数显式指定生产环境的配置文件：
 
-```
-bash
-
-
-复制代码
+```bash
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 ```
 
@@ -123,8 +114,8 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 
 也可以根据不同的环境变量文件来控制哪些文件被加载。例如：
 
-```
-bash复制代码# 加载开发环境
+```bash
+# 加载开发环境
 docker-compose --env-file ./env/app.dev.env up
 
 # 加载生产环境
