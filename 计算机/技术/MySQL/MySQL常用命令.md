@@ -1,3 +1,62 @@
+# MySQL 的语句执行顺序
+
+```
+select
+	*
+from
+	*
+left join
+	*
+on
+	*
+where
+	*
+group by
+	*
+having
+	*
+order by
+	*
+limit
+	*
+```
+
+
+
+## MySQL
+
+MySQL 关键字执行顺序如下：
+
+```sql
+from <left_table>
+<join_type> join <right_table>
+on <join_condition>
+where <where_condition>
+group by <group_by_list>
+max(),min(),sum(),count(),avg(),distinct(),group_concat()
+with {rollup | cube}
+having <having_condition>
+select
+distinct
+union <select ...>
+order by <order_by_list>
+limit <N, M>
+```
+
+**Select 语句完整的执行顺序：**
+
+1. from 子句组装来自不同数据源的数据；
+2. where 子句基于指定的条件对记录行进行筛选；
+3. group by 子句将数据划分为多个分组；
+4. 使用聚集函数进行计算；
+5. 使用 having 子句筛选分组；
+6. 计算所有的表达式；
+7. select 的字段；
+8. distinct 去重；
+9. union（去重，union all 不去重） 把两个或者多个 select 查询的结果集合并成一个；
+10. 使用 order by 对结果集进行排序；
+11. limit 取结果中的前 N 条或者第 N 条到第 M 条。
+
 # 基础操作与库命令
 
 ## MySQL 基础操作命令
@@ -188,6 +247,8 @@ replace 表名(字段名1,...) values(字段值...),...;
 
 ### 查询数据
 
+> 效率：子查询  >  内连（不会全表扫描）  >  外连（全表扫描主表）
+
 ```sql
 -- ---------------基本查询---------------
 -- 查询一张表的所有数据。
@@ -273,7 +334,7 @@ select * from 表名 group by 字段1 having 条件;
 
 `where、having` 的区别：
 
-> 这两个关键字都是用来做条件过滤的，但 `where` 优先级会比 `group by` 高，因此当分组后需要再做条件过滤时，就无法使用 `where` 来做筛选，而 `having` 就是用来对分组后的结果做条件过滤的。查询语句中的各类关键字执行优先级为：`from → where → select → group by → having → order by`。
+> 这两个关键字都是用来做条件过滤的，但 `where` 优先级会比 `group by` 高，因此当分组后需要再做条件过滤时，就无法使用 `where` 来做筛选，而 `having` 就是用来对分组后的结果做条件过滤的。查询语句中的各类关键字执行优先级为：`from → where → select → group by → having → order by`。想·
 
 #### 子查询
 
@@ -519,6 +580,50 @@ from `zz_users` group by user_sex;
 - `if(expr,r1,r2)`：`expr`是表达式，如果成立返回`r1`，否则返回`r2`。
 - `ifnull(v,r)`：如果`v`不为`null`则返回`v`，否则返回`r`。
 - `nullif(v1,v2)`：如果`v1 == v2`，则返回`null`，如果不相等则返回`V1`。
+
+```sql
+-- if的用例
+select if(user_id > 3,"√","×") from zz_users;
+
+-- ifnull的用例
+select ifnull(user_id,"×") from zz_users;
+
+-- --------------------case语法1：--------------------
+case <表达式>
+   when <值1> then <操作>
+   when <值2> then <操作>
+   ...
+   else <操作>
+end;
+-- 用例：判断当前时间是星期几
+select case weekday(now()) 
+	when 0 then '星期一' 
+	when 1 then '星期二' 
+	when 2 then '星期三' 
+	when 3 then '星期四' 
+	when 4 then '星期五' 
+	when 5 then '星期六'
+	else '星期天'
+end as "今天是星期几？";
+
+-- --------------------case语法2：--------------------
+case
+    when <条件1> then <命令>
+    when <条件2> then <命令>
+    ...
+    else commands
+end;
+-- 用例：判断今天是星期几
+select case
+	when weekday(now()) = 0 then '星期一' 
+	when weekday(now()) = 1 then '星期二' 
+	when weekday(now()) = 2 then '星期三' 
+	when weekday(now()) = 3 then '星期四' 
+	when weekday(now()) = 4 then '星期五' 
+	when weekday(now()) = 5 then '星期六'
+	else '星期天'
+end as "今天是星期几？";
+```
 
 ## 加密函数
 
